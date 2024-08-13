@@ -1,0 +1,21 @@
+package layout
+
+import "github.com/anvidev/nit/internal/view/ui"
+
+templ navigation() {
+	<header class="container flex items-center justify-between p-4">
+		<div hx-get="/" hx-target="body" class="flex items-center gap-2">
+			@ui.IconFlower(24)
+			<span>Nit</span>
+		</div>
+		<div class="flex items-center gap-2">
+			@ui.ThemeToggle()
+		</div>
+	</header>
+}
+
+templ link(to, label string) {
+	<li class="text-muted-foreground text-sm hover:underline">
+		<a href={ templ.SafeURL(to) }>{ label }</a>
+	</li>
+}

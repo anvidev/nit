@@ -1,0 +1,11 @@
+package landing
+
+import "github.com/anvidev/nit/internal/view/layout"
+
+templ ShowLanding() {
+	@layout.Base("Landing", true) {
+    <div class="flex gap-4 items-center mx-auto">
+    <a class="rounded px-2 py-1 bg-primary text-primary-foreground text-sm font-semibold" href={ templ.SafeURL("/login") }>Login with Facebook</a>
+    </div>
+	}
+}
