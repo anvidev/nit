@@ -16,6 +16,7 @@ type Config struct {
 	DatabaseUser         string
 	DatabasePassword     string
 	DatabaseName         string
+	SessionSecret        string
 }
 
 func Load() *Config {
@@ -33,5 +34,6 @@ func Load() *Config {
 		DatabaseUser:         os.Getenv("DB_USER"),
 		DatabasePassword:     os.Getenv("DB_PASSWORD"),
 		DatabaseName:         os.Getenv("DB_NAME"),
+		SessionSecret:        os.Getenv("SESSION_SECRET"),
 	}
 }

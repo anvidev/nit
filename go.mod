@@ -9,6 +9,9 @@ require (
 
 require (
 	github.com/a-h/templ v0.2.747
+	github.com/gorilla/sessions v1.3.0
 	github.com/lib/pq v1.10.9
 	golang.org/x/oauth2 v0.22.0
 )
+
+require github.com/gorilla/securecookie v1.1.2 // indirect

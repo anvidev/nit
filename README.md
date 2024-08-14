@@ -1,5 +1,7 @@
 # nit toy project
 
+nit is a social platform for yarn lovers to save, document and share their creations. originally made for my so.
+
 ## tech stack
 
 - [chi](https://github.com/go-chi/chi)
@@ -9,7 +11,7 @@
 
 ## running the application
 
-before running the application, make sure that [air](https://github.com/air-verse/air), [templ](https://github.com/a-h/templ) and tailwindcss cli tools are installed on your machine
+before running the application, make sure that [air](https://github.com/air-verse/air), [templ](https://github.com/a-h/templ) and tailwindcss cli tools are installed on your machine.
 
 ```bash
 # run the development server

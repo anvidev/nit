@@ -1,6 +1,17 @@
 package layout
 
-import "github.com/anvidev/nit/internal/view/ui"
+import (
+	"context"
+	"github.com/anvidev/nit/internal/service"
+	"github.com/anvidev/nit/internal/view/ui"
+)
+
+func getAuthenticatedUser(ctx context.Context) service.User {
+	if user, ok := ctx.Value(service.UserKey).(service.User); ok {
+		return user
+	}
+	return service.User{}
+}
 
 templ navigation() {
 	<header class="container flex items-center justify-between p-4">
@@ -9,6 +20,11 @@ templ navigation() {
 			<span>Nit</span>
 		</div>
 		<div class="flex items-center gap-2">
+			if len(getAuthenticatedUser(ctx).Name) > 0 {
+				<p>{ getAuthenticatedUser(ctx).Name }</p>
+			} else {
+				<p>Not logged in</p>
+			}
 			@ui.ThemeToggle()
 		</div>
 	</header>

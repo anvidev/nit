@@ -2,8 +2,10 @@ package service
 
 import (
 	"database/sql"
+	"encoding/gob"
 
 	"github.com/anvidev/nit/config"
+	"github.com/gorilla/sessions"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
 )
@@ -11,9 +13,11 @@ import (
 type Service struct {
 	DB    *sql.DB
 	Oauth *oauth2.Config
+	Store *sessions.CookieStore
 }
 
 func New(db *sql.DB, cfg *config.Config) *Service {
+	gob.Register(User{})
 	return &Service{
 		DB: db,
 		Oauth: &oauth2.Config{
@@ -22,5 +26,6 @@ func New(db *sql.DB, cfg *config.Config) *Service {
 			RedirectURL:  "http://localhost:3000/callback",
 			Endpoint:     facebook.Endpoint,
 		},
+		Store: sessions.NewCookieStore([]byte(cfg.SessionSecret)),
 	}
 }
