@@ -837,6 +837,10 @@ select {
   border-radius: 0.25rem;
 }
 
+.rounded-sm {
+  border-radius: calc(var(--radius) - 4px);
+}
+
 .bg-background {
   background-color: hsl(var(--background));
 }
