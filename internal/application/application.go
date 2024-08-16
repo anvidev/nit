@@ -24,7 +24,7 @@ func New(cfg *config.Config, logger *slog.Logger, db *sql.DB) *application {
 	return &application{
 		config:  cfg,
 		logger:  logger,
-		mux:     chi.NewMux(),
+		mux:     chi.NewRouter(),
 		service: service.New(db, cfg),
 	}
 }

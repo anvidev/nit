@@ -30,3 +30,9 @@ func (app *application) CallbackWithFacebook(w http.ResponseWriter, r *http.Requ
 	app.hxRedirect(w, r, "/")
 	return
 }
+
+func (app *application) createProjectPage(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("create page"))
+	return
+}

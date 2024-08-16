@@ -21,7 +21,7 @@ templ navigation() {
 		</div>
 		<div class="flex items-center gap-2">
 			if len(getAuthenticatedUser(ctx).Name) > 0 {
-				<p>{ getAuthenticatedUser(ctx).Name }</p>
+				<a href={ templ.SafeURL("/create") } class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">New project</a>
 			} else {
 				<p>Not logged in</p>
 			}
