@@ -58,6 +58,19 @@ func (s *Service) LoginWithFacebook(w http.ResponseWriter, r *http.Request, code
 	session, err := s.Store.Get(r, CookieKey)
 	session.Values[UserKey] = user
 	err = session.Save(r, w)
+	if err != nil {
+		return err
+	}
 
+	return nil
+}
+
+func (s *Service) LogoutUser(w http.ResponseWriter, r *http.Request) error {
+	session, _ := s.Store.Get(r, CookieKey)
+	session.Options.MaxAge = -1
+	err := session.Save(r, w)
+	if err != nil {
+		return err
+	}
 	return nil
 }

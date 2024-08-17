@@ -22,6 +22,7 @@ func (app *application) setupRoutes() {
 
 	r.Get("/", app.LandingGetPage)
 	r.Get("/login", app.LoginWithFacebook)
+	r.Get("/logout", app.handleLogout)
 	r.Get("/callback", app.CallbackWithFacebook)
 
 	r.Group(func(r chi.Router) {
