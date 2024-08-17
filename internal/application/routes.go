@@ -20,13 +20,13 @@ func (app *application) setupRoutes() {
 	fs := http.FileServer(http.Dir("static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
-	r.Get("/", app.LandingGetPage)
-	r.Get("/login", app.LoginWithFacebook)
+	r.Get("/", app.handleLandingPage)
+	r.Get("/login", app.handleLogin)
 	r.Get("/logout", app.handleLogout)
-	r.Get("/callback", app.CallbackWithFacebook)
+	r.Get("/callback", app.handleCallback)
 
 	r.Group(func(r chi.Router) {
-		r.Get("/create", app.createProjectPage)
+		r.Get("/create", app.handleCreateProject)
 	})
 }
 
