@@ -845,6 +845,10 @@ select {
   background-color: hsl(var(--background));
 }
 
+.bg-destructive {
+  background-color: hsl(var(--destructive));
+}
+
 .bg-primary {
   background-color: hsl(var(--primary));
 }
@@ -875,6 +879,10 @@ select {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.text-destructive-foreground {
+  color: hsl(var(--destructive-foreground));
 }
 
 .text-foreground {
