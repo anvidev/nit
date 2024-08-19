@@ -14,7 +14,7 @@ const (
 )
 
 type User struct {
-	ID         string
+	ID         int
 	FacebookID int64
 	Name       string
 	Email      string

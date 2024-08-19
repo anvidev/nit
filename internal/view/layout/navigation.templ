@@ -15,13 +15,13 @@ func getAuthenticatedUser(ctx context.Context) service.User {
 
 templ navigation() {
 	<header class="container flex items-center justify-between p-4">
-		<div hx-get="/" hx-target="body" class="flex items-center gap-2">
+		<a href={ templ.SafeURL("/")} class="flex items-center gap-2">
 			@ui.IconFlower(24)
 			<span>Nit</span>
-		</div>
+		</a>
 		<div class="flex items-center gap-2">
 			if len(getAuthenticatedUser(ctx).Name) > 0 {
-				<a href={ templ.SafeURL("/create") } class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">New project</a>
+				<a href={ templ.SafeURL("/projects/create") } class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">New project</a>
 			} else {
 				<p>Not logged in</p>
 			}

@@ -1,6 +1,6 @@
 FROM golang:1.22-alpine AS build
 
-RUN apk add --no-cache curl ca-certificates
+RUN apk add --no-cache curl ca-certificates make
 
 WORKDIR /app
 
@@ -8,6 +8,8 @@ RUN curl -sLo /usr/local/bin/tailwindcss https://github.com/tailwindlabs/tailwin
     && chmod +x /usr/local/bin/tailwindcss
 
 RUN go install github.com/a-h/templ/cmd/templ@latest
+
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 
 COPY go.* ./
 
@@ -30,7 +32,3 @@ COPY --from=build /app/.env .
 COPY --from=build /app/nit .
 
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-
-EXPOSE 3000
-
-ENTRYPOINT [ "/app/nit" ]

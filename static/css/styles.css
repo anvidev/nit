@@ -825,6 +825,10 @@ select {
   justify-content: space-between;
 }
 
+.gap-1 {
+  gap: 0.25rem;
+}
+
 .gap-2 {
   gap: 0.5rem;
 }
@@ -833,12 +837,26 @@ select {
   gap: 1rem;
 }
 
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
 .rounded {
   border-radius: 0.25rem;
 }
 
 .rounded-sm {
   border-radius: calc(var(--radius) - 4px);
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-border {
+  border-color: hsl(var(--border));
 }
 
 .bg-background {
@@ -918,4 +936,12 @@ select {
 
 .hover\:underline:hover {
   text-decoration-line: underline;
+}
+
+.focus\:border-primary:focus {
+  border-color: hsl(var(--primary));
+}
+
+.focus\:ring-primary:focus {
+  --tw-ring-color: hsl(var(--primary));
 }

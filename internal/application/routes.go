@@ -15,6 +15,7 @@ func (app *application) setupRoutes() {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.NoCache)
+	r.Use(middleware.RedirectSlashes)
 	r.Use(app.withAuth)
 
 	fs := http.FileServer(http.Dir("static"))
@@ -24,9 +25,14 @@ func (app *application) setupRoutes() {
 	r.Get("/login", app.handleLogin)
 	r.Get("/logout", app.handleLogout)
 	r.Get("/callback", app.handleCallback)
+	r.Get("/discover", nil)
 
 	r.Group(func(r chi.Router) {
-		r.Get("/create", app.handleCreateProject)
+		r.Use(app.mustAuth)
+		r.Get("/projects", app.getProjectListByID)
+		r.Get("/projects/create", app.handleCreateProject)
+		r.Post("/projects/create", app.handleCreateProject2)
+		r.Get("/projects/{id}", nil)
 	})
 }
 
@@ -37,5 +43,17 @@ func (app *application) withAuth(h http.Handler) http.Handler {
 
 		ctx := context.WithValue(r.Context(), service.UserKey, user)
 		h.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func (app *application) mustAuth(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, ok := app.getAuthedUser(r.Context())
+		if !ok {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+		h.ServeHTTP(w, r)
+		return
 	})
 }

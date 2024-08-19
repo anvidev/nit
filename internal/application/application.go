@@ -1,6 +1,7 @@
 package application
 
 import (
+	"context"
 	"database/sql"
 	"log/slog"
 	"net/http"
@@ -51,4 +52,13 @@ func (app *application) hxRedirect(w http.ResponseWriter, r *http.Request, url s
 	}
 	http.Redirect(w, r, url, http.StatusSeeOther)
 	return
+}
+
+func (app *application) getAuthedUser(ctx context.Context) (*service.User, bool) {
+	user, ok := ctx.Value(service.UserKey).(service.User)
+	if len(user.Name) == 0 {
+		return nil, false
+	}
+
+	return &user, ok
 }

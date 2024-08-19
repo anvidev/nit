@@ -1,0 +1,26 @@
+package projects
+
+import (
+	"fmt"
+	"github.com/anvidev/nit/internal/service"
+	"github.com/anvidev/nit/internal/view/layout"
+)
+
+templ ListProjects(projects []service.Project) {
+	@layout.Base("Your projects", true) {
+		<div>
+			<span>Your projects</span>
+			@list(projects)
+		</div>
+	}
+}
+
+templ list(projects []service.Project) {
+	<div>
+		for _,v := range projects {
+			<div>
+				<p>{ fmt.Sprint(v.ID) } - { v.Title }</p>
+			</div>
+		}
+	</div>
+}
