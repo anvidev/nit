@@ -100,3 +100,14 @@ func (app *application) deleteProjectByID(w http.ResponseWriter, r *http.Request
 	app.hxRedirect(w, r, "/projects")
 	return
 }
+
+func (app *application) getDiscoverProjects(w http.ResponseWriter, r *http.Request) {
+	projs, err := app.service.ListProjects()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	app.renderTemplate(r, w, projects.DiscoverProjects(projs))
+	return
+}

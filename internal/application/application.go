@@ -56,7 +56,7 @@ func (app *application) hxRedirect(w http.ResponseWriter, r *http.Request, url s
 
 func (app *application) getAuthedUser(ctx context.Context) (*service.User, bool) {
 	user, ok := ctx.Value(service.UserKey).(service.User)
-	if len(user.Name) == 0 {
+	if !ok || len(user.Name) == 0 {
 		return nil, false
 	}
 

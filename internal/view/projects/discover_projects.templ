@@ -1,0 +1,14 @@
+package projects
+
+import "github.com/anvidev/nit/internal/service"
+import "github.com/anvidev/nit/internal/view/layout"
+
+templ DiscoverProjects(projs []service.Project) {
+  @layout.Base("Discover projects", true) {
+    <div>
+      <span>Discover projects</span>
+      @list(projs)
+    </div>
+  }
+}
+

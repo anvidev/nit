@@ -23,7 +23,7 @@ func (app *application) setupRoutes() {
 	r.Get("/login", app.getLogin)
 	r.Get("/logout", app.getLogout)
 	r.Get("/callback", app.getCallback)
-	r.Get("/discover", nil)
+	r.Get("/discover", app.getDiscoverProjects)
 
 	r.Group(func(r chi.Router) {
 		r.Use(app.mustAuth)

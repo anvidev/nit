@@ -61,3 +61,26 @@ func (s *Service) DeleteProjectByID(ID string) error {
 	}
 	return nil
 }
+
+func (s *Service) ListProjects() ([]Project, error) {
+	rows, err := s.DB.Query("SELECT * FROM nit_project ORDER BY inserted DESC")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var projs []Project
+	for rows.Next() {
+		var proj Project
+		if err := rows.Scan(&proj.ID, &proj.Title, &proj.UserID, &proj.Inserted); err != nil {
+			return projs, err
+		}
+		projs = append(projs, proj)
+	}
+
+	if err = rows.Err(); err != nil {
+		return projs, err
+	}
+
+	return projs, nil
+}

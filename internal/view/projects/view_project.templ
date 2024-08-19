@@ -10,7 +10,9 @@ templ ViewProject(project service.Project) {
 	@layout.Base(project.Title, true) {
 		<div>
 			<span>{ project.Title }</span>
-			<button type="button" hx-delete={ fmt.Sprintf("/projects/%d", project.ID) }>Delete</button>
+			if layout.GetAuthenticatedUser(ctx).ID == project.UserID {
+				<button type="button" hx-delete={ fmt.Sprintf("/projects/%d", project.ID) }>Delete</button>
+			}
 		</div>
 	}
 }
