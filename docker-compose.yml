@@ -1,0 +1,25 @@
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    command: "/app/nit"
+  db:
+    image: postgres:16.2
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  adminer:
+    image: dockette/adminer:pgsql
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - db
