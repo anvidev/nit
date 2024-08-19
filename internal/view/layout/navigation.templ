@@ -6,7 +6,7 @@ import (
 	"github.com/anvidev/nit/internal/view/ui"
 )
 
-func getAuthenticatedUser(ctx context.Context) service.User {
+func GetAuthenticatedUser(ctx context.Context) service.User {
 	if user, ok := ctx.Value(service.UserKey).(service.User); ok {
 		return user
 	}
@@ -15,13 +15,24 @@ func getAuthenticatedUser(ctx context.Context) service.User {
 
 templ navigation() {
 	<header class="container flex items-center justify-between p-4">
-		<a href={ templ.SafeURL("/")} class="flex items-center gap-2">
-			@ui.IconFlower(24)
-			<span>Nit</span>
-		</a>
+		<div class="flex items-center gap-6">
+			<a href={ templ.SafeURL("/") } class="flex items-center gap-2">
+				@ui.IconFlower(24)
+				<span>Nit</span>
+			</a>
+			<nav>
+				<ul class="flex flex-row items-center gap-4">
+					@link("/discover", "Discover")
+					@link("/projects", "My projects")
+				</ul>
+			</nav>
+		</div>
 		<div class="flex items-center gap-2">
-			if len(getAuthenticatedUser(ctx).Name) > 0 {
-				<a href={ templ.SafeURL("/projects/create") } class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">New project</a>
+			if len(GetAuthenticatedUser(ctx).Name) > 0 {
+				<a
+					href={ templ.SafeURL("/projects/create") }
+					class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold"
+				>New project</a>
 			} else {
 				<p>Not logged in</p>
 			}
@@ -31,7 +42,7 @@ templ navigation() {
 }
 
 templ link(to, label string) {
-	<li class="text-muted-foreground text-sm hover:underline">
+	<li class="text-muted-foreground text-xs hover:underline">
 		<a href={ templ.SafeURL(to) }>{ label }</a>
 	</li>
 }
