@@ -44,3 +44,12 @@ func (s *Service) ListProjectsByID(ID int) ([]Project, error) {
 
 	return projects, nil
 }
+
+func (s *Service) GetProjectByID(ID string) (Project, error) {
+	var proj Project
+	err := s.DB.QueryRow("SELECT * FROM nit_project WHERE id = $1", ID).Scan(&proj.ID, &proj.Title, &proj.UserID, &proj.Inserted)
+	if err != nil {
+		return proj, err
+	}
+	return proj, nil
+}

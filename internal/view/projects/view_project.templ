@@ -1,0 +1,12 @@
+package projects
+
+import (
+	"github.com/anvidev/nit/internal/service"
+	"github.com/anvidev/nit/internal/view/layout"
+)
+
+templ ViewProject(project service.Project) {
+	@layout.Base(project.Title, true) {
+		<span>{ project.Title }</span>
+	}
+}

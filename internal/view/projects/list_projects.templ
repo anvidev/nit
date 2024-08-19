@@ -19,7 +19,7 @@ templ list(projects []service.Project) {
 	<div>
 		for _,v := range projects {
 			<div>
-				<p>{ fmt.Sprint(v.ID) } - { v.Title }</p>
+				<a href={ templ.SafeURL(fmt.Sprintf("/projects/%d", v.ID)) }>{ fmt.Sprint(v.ID) } - { v.Title }</a>
 			</div>
 		}
 	</div>

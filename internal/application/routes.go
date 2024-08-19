@@ -21,18 +21,19 @@ func (app *application) setupRoutes() {
 	fs := http.FileServer(http.Dir("static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
-	r.Get("/", app.handleLandingPage)
-	r.Get("/login", app.handleLogin)
-	r.Get("/logout", app.handleLogout)
-	r.Get("/callback", app.handleCallback)
+	r.Get("/", app.getLanding)
+	r.Get("/login", app.getLogin)
+	r.Get("/logout", app.getLogout)
+	r.Get("/callback", app.getCallback)
 	r.Get("/discover", nil)
 
 	r.Group(func(r chi.Router) {
 		r.Use(app.mustAuth)
 		r.Get("/projects", app.getProjectListByID)
-		r.Get("/projects/create", app.handleCreateProject)
-		r.Post("/projects/create", app.handleCreateProject2)
-		r.Get("/projects/{id}", nil)
+		r.Get("/projects/create", app.getCreateProject)
+		r.Post("/projects/create", app.postCreateProject)
+		r.Get("/projects/{id}", app.getProjectByID)
+		r.Delete("/projects/{id}", nil)
 	})
 }
 
