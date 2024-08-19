@@ -1,0 +1,27 @@
+package projects
+
+import "github.com/anvidev/nit/internal/view/layout"
+
+templ ShowCreateProject() {
+	@layout.Base("New project", true) {
+		<div class="flex flex-col gap-4">
+			<div>Create new project</div>
+			@CreateForm()
+		</div>
+	}
+}
+
+templ CreateForm() {
+	<form class="space-y-4" hx-post="/project/create">
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="title">Title</label>
+			<input
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				type="text"
+        name="title"
+				id="title"
+			/>
+		</div>
+      <button type="submit" class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">Create</button>
+	</form>
+}
