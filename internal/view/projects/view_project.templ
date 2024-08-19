@@ -1,12 +1,16 @@
 package projects
 
 import (
+	"fmt"
 	"github.com/anvidev/nit/internal/service"
 	"github.com/anvidev/nit/internal/view/layout"
 )
 
 templ ViewProject(project service.Project) {
 	@layout.Base(project.Title, true) {
-		<span>{ project.Title }</span>
+		<div>
+			<span>{ project.Title }</span>
+			<button type="button" hx-delete={ fmt.Sprintf("/projects/%d", project.ID) }>Delete</button>
+		</div>
 	}
 }

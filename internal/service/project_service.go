@@ -53,3 +53,11 @@ func (s *Service) GetProjectByID(ID string) (Project, error) {
 	}
 	return proj, nil
 }
+
+func (s *Service) DeleteProjectByID(ID string) error {
+	_, err := s.DB.Exec("DELETE FROM nit_project WHERE id = $1", ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}

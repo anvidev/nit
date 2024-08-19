@@ -89,3 +89,14 @@ func (app *application) getProjectByID(w http.ResponseWriter, r *http.Request) {
 	app.renderTemplate(r, w, projects.ViewProject(proj))
 	return
 }
+
+func (app *application) deleteProjectByID(w http.ResponseWriter, r *http.Request) {
+	ID := chi.URLParam(r, "id")
+	if err := app.service.DeleteProjectByID(ID); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	app.hxRedirect(w, r, "/projects")
+	return
+}

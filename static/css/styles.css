@@ -652,7 +652,7 @@ select {
   --secondary-foreground: 25 5% 74%;
   --accent: 25 11% 20%;
   --accent-foreground: 25 11% 80%;
-  --destructive: 13 96% 49%;
+  --destructive: 13 96% 20%;
   --destructive-foreground: 0 0% 100%;
   --ring: 25 31% 75%;
 }

@@ -33,7 +33,7 @@ func (app *application) setupRoutes() {
 		r.Get("/projects/create", app.getCreateProject)
 		r.Post("/projects/create", app.postCreateProject)
 		r.Get("/projects/{id}", app.getProjectByID)
-		r.Delete("/projects/{id}", nil)
+		r.Delete("/projects/{id}", app.deleteProjectByID)
 	})
 }
 
