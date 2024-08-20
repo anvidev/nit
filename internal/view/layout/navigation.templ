@@ -23,7 +23,9 @@ templ navigation() {
 			<nav>
 				<ul class="flex flex-row items-center gap-4">
 					@link("/discover", "Discover")
-					@link("/projects", "My projects")
+					if len(GetAuthenticatedUser(ctx).Name) > 0 {
+						@link("/projects", "My projects")
+					}
 				</ul>
 			</nav>
 		</div>

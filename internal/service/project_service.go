@@ -1,21 +1,39 @@
 package service
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Project struct {
-	ID       int
-	Title    string
-	UserID   int
-	Inserted time.Time
+	ID          int
+	Title       string
+	Description string
+	Designer    string
+	Size        string
+	Yarn        string
+	Needles     string
+	Started     time.Time
+	Ended       time.Time
+	UserID      int
+	Inserted    time.Time
 }
 
 type NewProject struct {
-	Title  string
-	UserID int
+	Title       string
+	Description string
+	Designer    string
+	Size        string
+	Yarn        string
+	Needles     string
+	Started     time.Time
+	Ended       time.Time
+	UserID      int
 }
 
 func (s *Service) CreateProject(p *NewProject) error {
-	_, err := s.DB.Exec("INSERT INTO nit_project (title, user_id) VALUES ($1, $2)", p.Title, p.UserID)
+	fmt.Printf("Inserting project: %+v\n", p)
+	_, err := s.DB.Exec("INSERT INTO nit_project (title, description, designer, yarn, size, needles, started, ended, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", p.Title, p.Description, p.Designer, p.Yarn, p.Size, p.Needles, p.Started, p.Ended, p.UserID)
 	if err != nil {
 		return err
 	}
@@ -32,7 +50,19 @@ func (s *Service) ListProjectsByID(ID int) ([]Project, error) {
 
 	for rows.Next() {
 		var p Project
-		if err := rows.Scan(&p.ID, &p.Title, &p.UserID, &p.Inserted); err != nil {
+		if err := rows.Scan(
+			&p.ID,
+			&p.Title,
+			&p.Description,
+			&p.Designer,
+			&p.Size,
+			&p.Yarn,
+			&p.Needles,
+			&p.Started,
+			&p.Ended,
+			&p.UserID,
+			&p.Inserted,
+		); err != nil {
 			return projects, nil
 		}
 		projects = append(projects, p)
@@ -47,7 +77,19 @@ func (s *Service) ListProjectsByID(ID int) ([]Project, error) {
 
 func (s *Service) GetProjectByID(ID string) (Project, error) {
 	var proj Project
-	err := s.DB.QueryRow("SELECT * FROM nit_project WHERE id = $1", ID).Scan(&proj.ID, &proj.Title, &proj.UserID, &proj.Inserted)
+	err := s.DB.QueryRow("SELECT * FROM nit_project WHERE id = $1", ID).Scan(
+		&proj.ID,
+		&proj.Title,
+		&proj.Description,
+		&proj.Designer,
+		&proj.Size,
+		&proj.Yarn,
+		&proj.Needles,
+		&proj.Started,
+		&proj.Ended,
+		&proj.UserID,
+		&proj.Inserted,
+	)
 	if err != nil {
 		return proj, err
 	}
@@ -72,7 +114,19 @@ func (s *Service) ListProjects() ([]Project, error) {
 	var projs []Project
 	for rows.Next() {
 		var proj Project
-		if err := rows.Scan(&proj.ID, &proj.Title, &proj.UserID, &proj.Inserted); err != nil {
+		if err := rows.Scan(
+			&proj.ID,
+			&proj.Title,
+			&proj.Description,
+			&proj.Designer,
+			&proj.Size,
+			&proj.Yarn,
+			&proj.Needles,
+			&proj.Started,
+			&proj.Ended,
+			&proj.UserID,
+			&proj.Inserted,
+		); err != nil {
 			return projs, err
 		}
 		projs = append(projs, proj)

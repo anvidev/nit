@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/anvidev/nit/internal/service"
 )
@@ -14,6 +15,10 @@ import (
 // This middleware does not care if a user is logged in or not.
 func (app *application) withAuth(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/static") {
+			h.ServeHTTP(w, r)
+			return
+		}
 		session, _ := app.service.Store.Get(r, service.CookieKey)
 		user, _ := session.Values[service.UserKey].(service.User)
 
@@ -26,6 +31,10 @@ func (app *application) withAuth(h http.Handler) http.Handler {
 // If no user data is found, it redirects the client to homepage, else it continues.
 func (app *application) mustAuth(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/static") {
+			h.ServeHTTP(w, r)
+			return
+		}
 		_, ok := app.getAuthedUser(r.Context())
 		if !ok {
 			http.Redirect(w, r, "/", http.StatusSeeOther)

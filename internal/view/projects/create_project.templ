@@ -4,7 +4,7 @@ import "github.com/anvidev/nit/internal/view/layout"
 
 templ ShowCreateProject() {
 	@layout.Base("New project", true) {
-		<div class="flex flex-col gap-4">
+		<div class="flex flex-col gap-4 w-full">
 			<div>Create new project</div>
 			@CreateForm()
 		</div>
@@ -12,16 +12,126 @@ templ ShowCreateProject() {
 }
 
 templ CreateForm() {
-	<form class="space-y-4" hx-post="/projects/create">
+	<form class="space-y-4 w-full" hx-post="/projects/create">
 		<div class="flex flex-col gap-1">
-			<label class="text-sm font-semibold" for="title">Title</label>
+			<label class="text-sm font-semibold" for="title">
+				Title
+				@redAsterisk()
+			</label>
 			<input
 				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
 				type="text"
-        name="title"
+				name="title"
 				id="title"
+				required
 			/>
 		</div>
-      <button type="submit" class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold">Create</button>
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="description">Description</label>
+			<textarea
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				id="description"
+				name="description"
+			></textarea>
+		</div>
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="designer">
+				Designer
+				@redAsterisk()
+			</label>
+			<input
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				type="text"
+				name="designer"
+				id="designer"
+				required
+			/>
+		</div>
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="size">
+				Size
+				@redAsterisk()
+			</label>
+			<input
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				type="text"
+				name="size"
+				id="size"
+				required
+			/>
+		</div>
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="Yarn">
+        Yarn
+				@redAsterisk()
+			</label>
+			<input
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				type="text"
+				name="yarn"
+				id="yarn"
+				required
+			/>
+		</div>
+		<div class="flex flex-col gap-1">
+			<label class="text-sm font-semibold" for="needle">
+				Knitting needles
+				@redAsterisk()
+			</label>
+			<input
+				class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+				type="text"
+				name="needles"
+				id="needles"
+				required
+			/>
+		</div>
+		<div class="flex flex-row items-center gap-4">
+			<div class="flex flex-col gap-1 flex-1">
+				<label class="text-sm font-semibold" for="started">
+					Started
+					@redAsterisk()
+				</label>
+				<input
+					class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+					type="date"
+					name="started"
+					id="started"
+					required
+				/>
+			</div>
+			<div class="flex flex-col gap-1 flex-1">
+				<label class="text-sm font-semibold" for="ended">
+					Ended
+					@redAsterisk()
+				</label>
+				<input
+					class="bg-background border border-border rounded-sm text-sm focus:ring-primary focus:border-primary"
+					type="date"
+					name="ended"
+					id="ended"
+					required
+				/>
+			</div>
+		</div>
+		<div class="flex items-center">
+			<input
+				id="public"
+				type="checkbox"
+				class="text-primary bg-background border-border rounded-sm focus:ring-accent focus:ring-2"
+			/>
+			<label for="public" class="ms-2 text-sm text-muted-foreground">
+				Make this project
+				public for others to see
+			</label>
+		</div>
+		<button
+			type="submit"
+			class="bg-primary text-primary-foreground text-sm rounded-sm py-1 px-2 font-semibold"
+		>Create</button>
 	</form>
+}
+
+templ redAsterisk() {
+	<span class="text-destructive text-sm">*</span>
 }

@@ -1,12 +1,26 @@
 package application
 
 import (
+	"log/slog"
 	"net/http"
+	"reflect"
+	"time"
 
 	"github.com/anvidev/nit/internal/service"
 	"github.com/anvidev/nit/internal/view/landing"
 	"github.com/anvidev/nit/internal/view/projects"
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/schema"
+)
+
+var (
+	decoder       = schema.NewDecoder()
+	timeConverter = func(value string) reflect.Value {
+		if v, err := time.Parse("2006-01-02", value); err == nil {
+			return reflect.ValueOf(v)
+		}
+		return reflect.Value{}
+	}
 )
 
 func (app *application) getLanding(w http.ResponseWriter, r *http.Request) {
@@ -49,15 +63,25 @@ func (app *application) getCreateProject(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) postCreateProject(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value(service.UserKey).(service.User)
-	title := r.FormValue("title")
-
-	np := service.NewProject{
-		Title:  title,
-		UserID: user.ID,
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
+		return
 	}
 
-	if err := app.service.CreateProject(&np); err != nil {
+	var proj service.NewProject
+	decoder.RegisterConverter(time.Time{}, timeConverter)
+
+	if err := decoder.Decode(&proj, r.Form); err != nil {
+		app.logger.Error("error parsing form data", slog.Any("error", err))
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	user, _ := r.Context().Value(service.UserKey).(service.User)
+	proj.UserID = user.ID
+
+	if err := app.service.CreateProject(&proj); err != nil {
+		app.logger.Error("error inserting project", slog.Any("error", err))
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
