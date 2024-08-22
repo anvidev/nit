@@ -63,7 +63,7 @@ func (app *application) getCreateProject(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) postCreateProject(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		http.Error(w, err.Error(), http.StatusUnprocessableEntity)
 		return
 	}
@@ -80,8 +80,16 @@ func (app *application) postCreateProject(w http.ResponseWriter, r *http.Request
 	user, _ := r.Context().Value(service.UserKey).(service.User)
 	proj.UserID = user.ID
 
-	if err := app.service.CreateProject(&proj); err != nil {
+	insertedID, err := app.service.CreateProject(&proj)
+	if err != nil {
 		app.logger.Error("error inserting project", slog.Any("error", err))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	files := r.MultipartForm.File["images"]
+	if err := app.service.UploadImages(app.config.AwsImageBucket, insertedID, files); err != nil {
+		app.logger.Error("error uploading image", slog.Any("error", err))
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/anvidev/nit/config"
 	"github.com/anvidev/nit/internal/service"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -21,12 +22,12 @@ type application struct {
 	service *service.Service
 }
 
-func New(cfg *config.Config, logger *slog.Logger, db *sql.DB) *application {
+func New(cfg *config.Config, logger *slog.Logger, db *sql.DB, s3 *s3.Client) *application {
 	return &application{
 		config:  cfg,
 		logger:  logger,
 		mux:     chi.NewRouter(),
-		service: service.New(db, cfg),
+		service: service.New(db, s3, cfg),
 	}
 }
 

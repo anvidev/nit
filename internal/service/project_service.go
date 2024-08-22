@@ -1,8 +1,14 @@
 package service
 
 import (
+	"context"
 	"fmt"
+	"mime/multipart"
+	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 type Project struct {
@@ -31,13 +37,13 @@ type NewProject struct {
 	UserID      int
 }
 
-func (s *Service) CreateProject(p *NewProject) error {
-	fmt.Printf("Inserting project: %+v\n", p)
-	_, err := s.DB.Exec("INSERT INTO nit_project (title, description, designer, yarn, size, needles, started, ended, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)", p.Title, p.Description, p.Designer, p.Yarn, p.Size, p.Needles, p.Started, p.Ended, p.UserID)
+func (s *Service) CreateProject(p *NewProject) (int, error) {
+	var id int
+	err := s.DB.QueryRow("INSERT INTO nit_project (title, description, designer, yarn, size, needles, started, ended, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id", p.Title, p.Description, p.Designer, p.Yarn, p.Size, p.Needles, p.Started, p.Ended, p.UserID).Scan(&id)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return id, nil
 }
 
 func (s *Service) ListProjectsByID(ID int) ([]Project, error) {
@@ -137,4 +143,45 @@ func (s *Service) ListProjects() ([]Project, error) {
 	}
 
 	return projs, nil
+}
+
+func (s *Service) UploadImages(bucketName string, projID int, files []*multipart.FileHeader) error {
+	errCh := make(chan error, len(files))
+	var wg sync.WaitGroup
+
+	for _, f := range files {
+		wg.Add(1)
+		go func(file *multipart.FileHeader) {
+			defer wg.Done()
+
+			f, err := file.Open()
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			obj := s3.PutObjectInput{
+				Bucket: aws.String(bucketName),
+				Key:    aws.String(fmt.Sprintf("images/%d/%s", projID, file.Filename)),
+				Body:   f,
+			}
+
+			if _, err := s.S3.PutObject(context.TODO(), &obj); err != nil {
+				errCh <- err
+				return
+			}
+
+		}(f)
+	}
+
+	wg.Wait()
+	close(errCh)
+
+	for err := range errCh {
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
