@@ -21,36 +21,3 @@ FROM alpine:3.20 AS deployer
   COPY --from=builder /go/bin/goose /usr/local/bin/goose
   RUN apk add --no-cache ca-certificates
   CMD ["/bin/sh", "-c", "goose up && /app/nit"]
-
-#   RUN apk add --no-cache curl ca-certificates make
-#
-#   WORKDIR /app
-#
-#   RUN curl -sLo /usr/local/bin/tailwindcss https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 \
-#       && chmod +x /usr/local/bin/tailwindcss
-#
-#   RUN go install github.com/a-h/templ/cmd/templ@latest
-#
-#   RUN go install github.com/pressly/goose/v3/cmd/goose@latest
-#
-#   COPY go.* ./
-#
-#   RUN go mod download && go mod verify
-#
-#   COPY . .
-#
-#   RUN templ generate && tailwindcss -i internal/view/css/styles.css -o static/css/styles.css
-#
-#   RUN CGO_ENABLED=0 GOOS=linux go build -o nit ./cmd/main.go
-#
-# FROM scratch AS deploy
-#
-#   WORKDIR /app
-#
-#   COPY --from=build /app/static ./static
-#
-#   COPY --from=build /app/.env .
-#
-#   COPY --from=build /app/nit .
-#
-#   COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
