@@ -33,7 +33,7 @@ func New(cfg *config.Config, logger *slog.Logger, db *sql.DB, s3 *s3.Client) *ap
 
 func (app *application) Run() error {
 	app.setupRoutes()
-	err := http.ListenAndServe(app.config.Addr, app.mux)
+  err := http.ListenAndServe(":" + app.config.Addr, app.mux)
 	return err
 }
 
