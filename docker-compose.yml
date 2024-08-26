@@ -15,13 +15,22 @@ services:
     build: .
     restart: always
     ports:
-      - 3000:3000
+      - ${ADDR}:3000
     environment:
+      - ADDR=${ADDR}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - FB_CLIENT_ID=${FB_CLIENT_ID}
+      - FB_CLIENT_SECRET=${FB_CLIENT_SECRET}
+      - FB_CALLBACK_URL=${FB_CALLBACK_URL}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCES_KEY=${AWS_SECRET_ACCES_KEY}
+      - AWS_IMAGE_BUCKET=${AWS_IMAGE_BUCKET}
       - GOOSE_DRIVER=postgres
       - GOOSE_DBSTRING=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
       - GOOSE_MIGRATION_DIR=migrations
