@@ -13,7 +13,6 @@ nit is a social platform for yarn lovers to save, document and share their creat
 
 ```bash
 # populate env vars
-
 cp .env.example .env
 ```
 
