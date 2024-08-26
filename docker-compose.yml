@@ -15,7 +15,7 @@ services:
     build: .
     restart: always
     ports:
-      - ${ADDR}:3000
+      - ${ADDR}:${ADDR}
     environment:
       - ADDR=${ADDR}
       - SESSION_SECRET=${SESSION_SECRET}
